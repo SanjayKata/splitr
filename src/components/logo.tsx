@@ -23,7 +23,7 @@ export function Logo({ className }: { className?: string }) {
         </clipPath>
       </defs>
       <g clipPath={`url(#${clip})`}>
-        <polygon points="0,0 512,0 0,512" fill="#059669" />
+        <polygon points="0,0 512,0 0,512" fill="var(--brand-600)" />
         <polygon points="512,0 512,512 0,512" fill="#0a0a0a" />
         <line x1="512" y1="0" x2="0" y2="512" stroke="#ffffff" strokeWidth="6" strokeOpacity="0.5" />
         <g transform="translate(95 95) scale(6.25)" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
