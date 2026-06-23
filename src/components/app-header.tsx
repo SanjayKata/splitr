@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useAuth } from "@/components/auth/auth-provider";
+import { Logo } from "@/components/logo";
 
 /** Top bar for signed-in pages: brand + current user. */
 export function AppHeader() {
@@ -17,9 +18,7 @@ export function AppHeader() {
           href="/groups"
           className="flex items-center gap-2 font-bold text-zinc-900 dark:text-zinc-50"
         >
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500 text-sm font-black text-white">
-            ₹
-          </span>
+          <Logo className="h-7 w-7" />
           Splitr
         </Link>
         {name && (
