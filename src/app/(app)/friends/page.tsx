@@ -29,6 +29,7 @@ export default function FriendsPage() {
   const friendsQuery = useFriends();
   const overviewQuery = useOverview();
   const [filter, setFilter] = useState<Filter>("all");
+  const [filterOpen, setFilterOpen] = useState(false);
   const [adding, setAdding] = useState(false);
   const [searching, setSearching] = useState(false);
   const [search, setSearch] = useState("");
@@ -64,8 +65,7 @@ export default function FriendsPage() {
         <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
           Friends
         </h1>
-        <div className="flex items-center gap-2">
-          <FilterToggle value={filter} onChange={setFilter} />
+        <div className="flex items-center gap-1.5">
           <IconButton
             label="Search friends"
             active={searching}
@@ -77,17 +77,25 @@ export default function FriendsPage() {
             <path d="m21 21-4.3-4.3" />
             <circle cx="11" cy="11" r="7" />
           </IconButton>
-          <Button
-            size="sm"
-            variant="secondary"
+          <IconButton
+            label="Filter"
+            active={filter !== "all"}
+            onClick={() => setFilterOpen(true)}
+          >
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+          </IconButton>
+          <IconButton
+            label="Add friend"
+            active={adding}
             onClick={() => setAdding((v) => !v)}
           >
-            Add friend
-          </Button>
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <line x1="19" x2="19" y1="8" y2="14" />
+            <line x1="22" x2="16" y1="11" y2="11" />
+          </IconButton>
           <Link href="/settle/new">
-            <Button size="sm" variant="secondary">
-              Settle up
-            </Button>
+            <Button size="sm">Settle up</Button>
           </Link>
         </div>
       </div>
@@ -107,6 +115,13 @@ export default function FriendsPage() {
           <AddFriendForm onDone={() => setAdding(false)} />
         </Card>
       )}
+
+      <FilterSheet
+        open={filterOpen}
+        value={filter}
+        onChange={setFilter}
+        onClose={() => setFilterOpen(false)}
+      />
 
       {overviewQuery.data && overviewQuery.data.totals.length > 0 && (
         <div className="mb-6 grid gap-3 sm:grid-cols-2">
@@ -164,39 +179,86 @@ export default function FriendsPage() {
   );
 }
 
-function FilterToggle({
+const FILTER_OPTIONS: { key: Filter; label: string; hint: string }[] = [
+  { key: "all", label: "All", hint: "Everyone" },
+  { key: "owe", label: "You owe", hint: "Friends you owe money" },
+  { key: "owed", label: "You are owed", hint: "Friends who owe you" },
+  { key: "settled", label: "Settled up", hint: "No outstanding balance" },
+];
+
+/** Bottom-sheet filter picker (keeps the header compact on small screens). */
+function FilterSheet({
+  open,
   value,
   onChange,
+  onClose,
 }: {
+  open: boolean;
   value: Filter;
   onChange: (f: Filter) => void;
+  onClose: () => void;
 }) {
-  // Short labels, same meaning: Owe = you owe, Owed = you are owed.
-  const options: { key: Filter; label: string; title: string }[] = [
-    { key: "all", label: "All", title: "All friends" },
-    { key: "owe", label: "Owe", title: "You owe" },
-    { key: "owed", label: "Owed", title: "You are owed" },
-    { key: "settled", label: "Settled", title: "No balance" },
-  ];
+  if (!open) return null;
+
   return (
-    <div className="inline-flex rounded-lg border border-zinc-200 p-0.5 dark:border-zinc-700">
-      {options.map((o) => (
-        <button
-          key={o.key}
-          type="button"
-          title={o.title}
-          onClick={() => onChange(o.key)}
-          aria-pressed={value === o.key}
-          className={cn(
-            "rounded-md px-2.5 py-1 text-xs font-medium transition-colors",
-            value === o.key
-              ? "bg-emerald-600 text-white"
-              : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100",
-          )}
-        >
-          {o.label}
-        </button>
-      ))}
+    <div className="fixed inset-0 z-50">
+      <button
+        type="button"
+        aria-label="Close filter"
+        onClick={onClose}
+        className="absolute inset-0 bg-black/40"
+      />
+      <div className="absolute inset-x-0 bottom-0 rounded-t-2xl border-t border-zinc-200 bg-white p-4 pb-6 shadow-2xl dark:border-zinc-800 dark:bg-zinc-950">
+        <div className="mx-auto w-full max-w-3xl">
+          <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+          <h2 className="mb-3 text-sm font-semibold text-zinc-500 dark:text-zinc-400">
+            Show
+          </h2>
+          <ul className="flex flex-col gap-1">
+            {FILTER_OPTIONS.map((o) => {
+              const selected = value === o.key;
+              return (
+                <li key={o.key}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onChange(o.key);
+                      onClose();
+                    }}
+                    className={cn(
+                      "flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition-colors",
+                      selected
+                        ? "bg-emerald-50 dark:bg-emerald-900/20"
+                        : "hover:bg-zinc-50 dark:hover:bg-zinc-900",
+                    )}
+                  >
+                    <span>
+                      <span
+                        className={cn(
+                          "block text-sm font-medium",
+                          selected
+                            ? "text-emerald-700 dark:text-emerald-300"
+                            : "text-zinc-900 dark:text-zinc-100",
+                        )}
+                      >
+                        {o.label}
+                      </span>
+                      <span className="block text-xs text-zinc-500 dark:text-zinc-400">
+                        {o.hint}
+                      </span>
+                    </span>
+                    {selected && (
+                      <span className="text-emerald-600 dark:text-emerald-400">
+                        ✓
+                      </span>
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
