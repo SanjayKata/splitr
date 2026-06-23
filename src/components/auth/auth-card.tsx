@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Logo } from "@/components/logo";
 
 /** Centered card layout shared by the login and signup screens. */
 export function AuthCard({
@@ -16,9 +17,7 @@ export function AuthCard({
     <div className="flex flex-1 items-center justify-center bg-gradient-to-b from-emerald-50 to-white px-4 py-16 dark:from-zinc-900 dark:to-black">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center gap-2 text-center">
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500 text-2xl font-black text-white shadow-lg shadow-emerald-500/30">
-            ₹
-          </span>
+          <Logo className="h-12 w-12 rounded-2xl shadow-lg shadow-emerald-500/30" />
           <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
             {title}
           </h1>
