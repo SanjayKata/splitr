@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { RequireAuth } from "@/components/auth/require-auth";
 import { AppHeader } from "@/components/app-header";
 import { AppNav } from "@/components/app-nav";
+import { NotificationsListener } from "@/components/notifications-listener";
 
 /** Layout for all signed-in pages: guard + top bar + bottom tab nav. */
 export default function AppLayout({ children }: { children: ReactNode }) {
@@ -12,6 +13,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       <AppHeader />
       <div className="flex flex-1 flex-col">{children}</div>
       <AppNav />
+      <NotificationsListener />
     </RequireAuth>
   );
 }
