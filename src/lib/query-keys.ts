@@ -3,6 +3,7 @@ export const queryKeys = {
   profile: ["profile"] as const,
   friends: ["friends"] as const,
   overview: ["overview"] as const,
+  notifications: ["notifications"] as const,
   history: ["history"] as const,
   groups: ["groups"] as const,
   group: (id: string | null) => ["group", id] as const,
