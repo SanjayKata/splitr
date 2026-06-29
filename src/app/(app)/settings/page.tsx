@@ -18,6 +18,7 @@ import { Select } from "@/components/ui/select";
 import { Field } from "@/components/ui/field";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
+import { PushToggle } from "@/components/push-toggle";
 
 export default function SettingsPage() {
   const { user, signOut } = useAuth();
@@ -134,6 +135,11 @@ export default function SettingsPage() {
         Appearance
       </h2>
       <AppearanceSection />
+
+      <h2 className="mt-8 mb-2 text-sm font-semibold tracking-wide text-zinc-500 uppercase dark:text-zinc-400">
+        Notifications
+      </h2>
+      <PushToggle />
 
       <h2 className="mt-8 mb-2 text-sm font-semibold tracking-wide text-zinc-500 uppercase dark:text-zinc-400">
         Account
