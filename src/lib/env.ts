@@ -24,6 +24,13 @@ export type PublicEnv = z.infer<typeof publicEnvSchema>;
 export const requireEmailConfirmation =
   process.env.NEXT_PUBLIC_REQUIRE_EMAIL_CONFIRMATION === "true";
 
+/**
+ * Public VAPID key for Web Push (safe to expose). When unset, the push-
+ * notifications toggle is hidden. The matching private key lives only in the
+ * send-push Edge Function's secrets.
+ */
+export const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "";
+
 let cached: PublicEnv | null = null;
 
 /**
