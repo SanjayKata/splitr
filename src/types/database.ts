@@ -192,6 +192,62 @@ export interface Database {
         };
         Relationships: [];
       };
+      notifications: {
+        Row: {
+          id: string;
+          user_id: string;
+          kind: "expense" | "settlement";
+          actor_name: string;
+          group_id: string | null;
+          group_name: string | null;
+          title: string | null;
+          amount: number | null;
+          currency: string | null;
+          read: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          kind: "expense" | "settlement";
+          actor_name: string;
+          group_id?: string | null;
+          group_name?: string | null;
+          title?: string | null;
+          amount?: number | null;
+          currency?: string | null;
+          read?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          read?: boolean;
+        };
+        Relationships: [];
+      };
+      push_subscriptions: {
+        Row: {
+          id: string;
+          user_id: string;
+          endpoint: string;
+          p256dh: string;
+          auth: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          endpoint: string;
+          p256dh: string;
+          auth: string;
+          created_at?: string;
+        };
+        Update: {
+          endpoint?: string;
+          p256dh?: string;
+          auth?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: {
@@ -243,3 +299,4 @@ export type Expense = Database["public"]["Tables"]["expenses"]["Row"];
 export type ExpenseSplit =
   Database["public"]["Tables"]["expense_splits"]["Row"];
 export type Settlement = Database["public"]["Tables"]["settlements"]["Row"];
+export type Notification = Database["public"]["Tables"]["notifications"]["Row"];
